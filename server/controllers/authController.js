@@ -12,9 +12,9 @@ const generateToken = (user) => {
 
 //registerUser takes in the name email and password and first cheks if the email is in allowedEmails then if the user already exists, and if it does not then create user
 const registerUser = async (req, res) => {
-    const {name, email, password} = req.body;
 
     try {
+        const {name, email, password} = req.body;
         if(!allowedEmails.includes(email.toLowerCase())){
             return res.status(403).json({message: 'Email is not authorized'});
         }
@@ -40,4 +40,38 @@ const registerUser = async (req, res) => {
     }
 };
 
-module.exports = { registerUser};
+const loginUser = async(req, res) => {
+
+        try{
+            const{email, password} = req.body;
+
+            if (!email || !password) {
+                return res.status(401).json({ message: 'Please provide email or password' });
+            }
+
+            const user = await User.findOne({email});
+            if(!user){
+                return res.status(401).json({message: "Email is not found"});
+            }
+
+            if (user){
+                const isMatch = await user.matchPassword(password);
+                if (!isMatch) {
+                    return res.status(401).json({ message: 'Invalid Password' });
+                  }
+            }
+
+            return res.status(200).json({
+                _id: user._id,
+                name: user.name,
+                email: user.email,
+                role: user.role,
+                token: generateToken(user),
+              });
+
+        }catch(err){
+            res.status(500).json({message: "Server error"})
+
+        }
+}
+module.exports = { registerUser, loginUser};
