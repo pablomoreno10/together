@@ -1,17 +1,15 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const connectDB = require('./config/db');
-const { registerUser } = require('./controllers/authController');
-
 
 dotenv.config();
 
 const app = express();
 
-app.use(express.json()); //middleware
+app.use(express.json()); 
 
 connectDB();
 
-app.post('/api/auth/register', registerUser);
+app.use('/api/auth', require('./routes/auth'));
 
 app.listen(3000, () => console.log('Sever running on port 3000'));
