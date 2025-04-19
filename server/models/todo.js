@@ -3,7 +3,7 @@ const { Types } = mongoose; //Types to access ObjectId
 
 //To Do portion of the app schema
 
-const toDoSchema = new Schema(
+const toDoSchema = new mongoose.Schema(
   {
     title: {
       type: String,

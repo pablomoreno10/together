@@ -1,4 +1,4 @@
-const jwt = require('jsonwentoken');
+const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 const User = require('../models/users');
 dotenv.config();
@@ -9,16 +9,13 @@ const protected = (req, res, next) => {
 
     if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')){
         try{
-
             token = req.headers.authorization.split(' ')[1]; //We want to get the token part of authorization: Bearer token
-
             const verificated = jwt.verify(token, process.env.JWT_SECRET);
-
             req.user = {
+              
             id: verificated.id,
-            role: verificated.role
-            };
-          
+            role: verificated.role //necessary for ToDo
+          };
             next(); //go to route logic
         }catch(err){
             console.error('Token verification failed:', err);
@@ -32,4 +29,4 @@ const protected = (req, res, next) => {
 
 };
 
-module.exports({protected});
+module.exports = {protected};
