@@ -34,4 +34,35 @@ const getToDo = async (req, res) => {
   }
 };
 
-module.exports = { createToDo, getToDo };
+const deleteToDo = async (req, res) => {
+  try {
+
+    const { id } = req.params;
+    const { role } = req.user;
+
+    if (role !== 'captain') {
+      return res.status(401).json({ message: 'Sorry, only captains can create To Dos.' });
+    }
+
+    const todo = await Todo.findById({id});
+
+    if(!todo){
+      return res.status(404).json({ message: 'To-Do not found' });
+    }
+
+    await todo.deleteOne();
+
+    res.status(200).json({ message: 'To-Do deleted successfully' });
+  } catch (err) {
+    console.error('Error deleting todo:', err.message);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+/*const updateToDo = async (req, res) => {
+  
+};
+*/ 
+
+
+module.exports = { createToDo, getToDo, deleteToDo};
