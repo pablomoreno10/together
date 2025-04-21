@@ -1,4 +1,5 @@
 const Event = require('../models/events');
+const { createGoogleCalendarEvent } = require('../utils/calendarService');
 
 const createEvent = async (req, res) => {
 
@@ -17,7 +18,21 @@ const createEvent = async (req, res) => {
             createdBy,
             createdAt: new Date()
         });
-
+        
+        try{
+          //console.log("Attempting to create Google Calendar event...");
+          //This will not only create and store the event inside MongoDB but also create it inside Google Calendar simultaneously.
+          await createGoogleCalendarEvent({
+            title,
+            location,
+            date,
+            notes
+          });
+          //console.log("Google Calendar event successfully created");
+        }catch(err){
+          console.log('Error creating event in Google Calendar', err.message);
+        }
+        
         res.status(201).json({ event });
 
     }catch(err){
@@ -107,10 +122,10 @@ const updateEvent = async (req, res) => {
       
           res.status(200).json(updatedEvent);
       
-        } catch (err) {
+      }catch (err) {
           console.error('Update event error:', err.message);
           res.status(500).json({ message: 'Server error', error: err.message });
-        }
+      }
 };
 
 module.exports = { createEvent, getEvents, attendEvent, deleteEvent, updateEvent };
