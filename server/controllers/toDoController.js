@@ -44,7 +44,7 @@ const deleteToDo = async (req, res) => {
       return res.status(401).json({ message: 'Sorry, only captains can create To Dos.' });
     }
 
-    const todo = await Todo.findById({id});
+    const todo = await Todo.findById(id);
 
     if(!todo){
       return res.status(404).json({ message: 'To-Do not found' });

@@ -4,8 +4,8 @@ const { createToDo, getToDo, deleteToDo  } = require('../controllers/toDoControl
 const express = require('express');
 const router = express.Router();
 
-router.post('/create', protected, createToDo);
-router.get('/get', protected, getToDo);
+router.post('/', protected, createToDo);       
+router.get('/', protected, getToDo);            
 router.delete('/:id', protected, deleteToDo);
 
 module.exports = router;
