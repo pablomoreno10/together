@@ -1,0 +1,116 @@
+const Event = require('../models/events');
+
+const createEvent = async (req, res) => {
+
+    try{
+        const {title, location, date, notes} = req.body;
+        const { id: createdBy, role } = req.user;
+        
+        if (role !== 'captain'){
+            return res(401).json({message: 'Sorry, only captains are authorized to create events.'})
+        };
+        const event = await Event.create({
+            title,
+            location,
+            date,
+            notes,
+            createdBy,
+            createdAt: new Date()
+        });
+
+        res.status(201).json({ event });
+
+    }catch(err){
+        console.log("Error creating event", err.message);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+const getEvents = async (req, res) => { 
+    try{
+        const event = await Event.find().sort({ createdAt: -1 });
+        res.status(200).json({event});
+    }catch(err){
+        console.log("Get event error", err.message);
+        res.status(500).json({ message: 'Server error' });
+    }
+ };
+
+ const attendEvent = async (req, res) => {
+    try {
+      const { id } = req.params; 
+      const { id: userId } = req.user;
+  
+      const event = await Event.findById(id);
+  
+      if (!event) {
+        return res.status(404).json({ message: 'Event not found' });
+      }
+  
+      if (event.attending.includes(userId)) {
+        return res.status(400).json({ message: 'Already marked as attending' });
+      }
+  
+      event.attending.push(userId);
+      await event.save();
+  
+      res.status(200).json({ message: 'Marked as attending', attendingCount: event.attending.length }); 
+    } catch (err) {
+      console.error("Attend Event Error", err.message);
+      res.status(500).json({ message: 'Server error' });
+    }
+  };
+
+const deleteEvent = async (req, res) => { 
+    try{
+        const {id} = req.params;
+        const {role} = req.user;
+
+        if (role !== 'captain') {
+            return res.status(401).json({ message: 'Sorry, only captains can create events.' });
+        };
+
+        const event = await Event.findById(id);
+
+        if(!event){
+            return res.status(404).json({ message: 'To-Do not found' });
+        };
+
+        await event.deleteOne();
+
+        res.status(200).json({ message: 'Event deleted successfully' });
+    }catch(err){
+        console.error('Error deleting event:', err.message);
+        return res.status(500).json({ message: 'Server error' });
+    }
+ };
+
+const updateEvent = async (req, res) => { 
+    try{
+        
+        const {id} = req.params;
+
+        const{role} = req.user;
+
+        if (role !== 'captain') {
+            return res.status(401).json({ message: 'Sorry, only captains can update events.' });
+        };
+
+        const updatedEvent = await Event.findByIdAndUpdate(id, req.body, {
+            new: true,
+            runValidators: true
+          });
+
+          if (!updatedEvent) {
+            return res.status(404).json({ message: 'Event not found' });
+          }
+      
+          res.status(200).json(updatedEvent);
+      
+        } catch (err) {
+          console.error('Update event error:', err.message);
+          res.status(500).json({ message: 'Server error', error: err.message });
+        }
+};
+
+module.exports = { createEvent, getEvents, attendEvent, deleteEvent, updateEvent };
