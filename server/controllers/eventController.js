@@ -53,6 +53,7 @@ const getEvents = async (req, res) => {
 
  const attendEvent = async (req, res) => {
     try {
+
       const { id } = req.params; 
       const { id: userId } = req.user;
   
@@ -61,15 +62,23 @@ const getEvents = async (req, res) => {
       if (!event) {
         return res.status(404).json({ message: 'Event not found' });
       }
-  
-      if (event.attending.includes(userId)) {
-        return res.status(400).json({ message: 'Already marked as attending' });
+    
+      const isUserAttending = event.attending.includes(userId);
+
+      if (isUserAttending){
+        event.attending = event.attending.filter(uid => uid.toString() !== userId);
+        await event.save();
+
+        return res.status(200).json({message: "User is no longer attending the event", attendingCount: event.attending.length});
+      }else{
+
+        event.attending.push(userId);
+        await event.save();
+
+        return res.status(200).json({message: "User is attending the event", attendingCount: event.attending.length});
+
       }
-  
-      event.attending.push(userId);
-      await event.save();
-  
-      res.status(200).json({ message: 'Marked as attending', attendingCount: event.attending.length }); 
+      
     } catch (err) {
       console.error("Attend Event Error", err.message);
       res.status(500).json({ message: 'Server error' });
@@ -88,7 +97,7 @@ const deleteEvent = async (req, res) => {
         const event = await Event.findById(id);
 
         if(!event){
-            return res.status(404).json({ message: 'To-Do not found' });
+            return res.status(404).json({ message: 'Event not found' });
         };
 
         await event.deleteOne();
