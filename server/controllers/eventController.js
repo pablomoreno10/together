@@ -1,4 +1,6 @@
 const Event = require('../models/events');
+const User = require('../models/users');
+
 const { createGoogleCalendarEvent } = require('../utils/calendarService');
 
 const createEvent = async (req, res) => {
@@ -137,4 +139,40 @@ const updateEvent = async (req, res) => {
       }
 };
 
-module.exports = { createEvent, getEvents, attendEvent, deleteEvent, updateEvent };
+const userTrackerEvent = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { teamId } = req.user; 
+
+    const event = await Event.findById(id);
+    if (!event) {
+      return res.status(404).json({ message: 'Event not found' });
+    }
+
+    const allUsers = await User.find({ teamId }, 'name email'); 
+
+
+    //Let's turn attending into a set to then use has which results in an O(1) search instead of a linear search!
+
+    const attendingSet = new Set(event.attending.map(id => id.toString()));
+
+    const attending = [];
+    const notAttending = [];
+
+    allUsers.forEach(user => {
+      if (attendingSet.has(user._id.toString())) {
+        attending.push(user);
+      } else {
+        notAttending.push(user);
+      }
+    });
+
+    res.status(200).json({ attending, notAttending });
+
+  } catch (err) {
+    console.error('Error getting attendees:', err.message);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+module.exports = { createEvent, getEvents, attendEvent, deleteEvent, updateEvent, userTrackerEvent };
