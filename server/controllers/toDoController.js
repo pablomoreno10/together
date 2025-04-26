@@ -59,10 +59,35 @@ const deleteToDo = async (req, res) => {
   }
 };
 
-/*const updateToDo = async (req, res) => {
-  
+const toggleToDoCompletion = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { id: userId } = req.user;
+
+    const todo = await ToDo.findById(id);
+    if (!todo) {
+      return res.status(404).json({ message: 'To-Do not found' });
+    }
+
+    const hasCompleted = todo.completedBy.includes(userId);
+
+    if (hasCompleted) {
+      todo.completedBy = todo.completedBy.filter(uid => uid.toString() !== userId);
+    } else {
+      todo.completedBy.push(userId);
+    }
+
+    await todo.save();
+
+    res.status(200).json({ message: hasCompleted ? 'Marked as incomplete' : 'Marked as complete', completedCount: todo.completedBy.length
+    });
+
+  } catch (err) {
+    console.error('Toggle completion error:', err.message);
+    res.status(500).json({ message: 'Server error' });
+  }
 };
-*/ 
 
 
-module.exports = { createToDo, getToDo, deleteToDo};
+
+module.exports = { createToDo, getToDo, deleteToDo, toggleToDoCompletion};
