@@ -11,13 +11,12 @@ const {
 
 const { protected } = require('../middleware/authMiddleware');
 
-router.post('/', protected, createEvent); //Create event
-router.get('/', protected, getEvents);   //Get all events
-router.patch('/:id/attend', protected, attendEvent); // Attend an event
-router.put('/:id', protected, updateEvent); // Update event
-router.delete('/:id', protected, deleteEvent); // Delete event
-router.get('/:id', protected, userTrackerEvent);
-
+router.get('/', protected, getEvents);          
+router.post('/', protected, createEvent);       
+router.patch('/:id/attend', protected, attendEvent); //Attend/unattend event
+router.put('/:id', protected, updateEvent);     
+router.delete('/:id', protected, deleteEvent);   
+router.get('/tracker/:id', protected, userTrackerEvent); //View attendees
 
 module.exports = router;
 

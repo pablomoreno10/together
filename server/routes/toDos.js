@@ -4,9 +4,9 @@ const { createToDo, getToDo, deleteToDo, toggleToDoCompletion  } = require('../c
 const express = require('express');
 const router = express.Router();
 
-router.post('/create', protected, createToDo);       
-router.get('/get', protected, getToDo);            
-router.delete('/:id', protected, deleteToDo);
-router.patch('/:id/complete', protected, toggleToDoCompletion);
+router.get('/', protected, getToDo);             
+router.post('/', protected, createToDo);         
+router.patch('/:id/complete', protected, toggleToDoCompletion); 
+router.delete('/:id', protected, deleteToDo);    
 
 module.exports = router;
