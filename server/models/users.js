@@ -27,7 +27,9 @@ const userSchema = new mongoose.Schema({
     },
     teamId: { 
         type: String,
-        default: null //tentative
+        required: true,
+        default: 'mens-soccer',
+        enum: ['mens-soccer'] //Will add more later on
     }
 });
 

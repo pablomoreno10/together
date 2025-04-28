@@ -14,7 +14,7 @@ const generateToken = (user) => {
 const registerUser = async (req, res) => {
 
     try {
-        const {name, email, password, role} = req.body;
+        const {name, email, password, role, teamId} = req.body;
         if(!allowedEmails.includes(email.toLowerCase())){
             return res.status(403).json({message: 'Email is not authorized'});
         }
@@ -24,7 +24,7 @@ const registerUser = async (req, res) => {
             return res.status(400).json({message: "User already exists"});
         }
 
-        const user = await User.create({name, email, password, role});
+        const user = await User.create({name, email, password, role, teamId});
 
         res.status(201).json(
             {
@@ -32,6 +32,7 @@ const registerUser = async (req, res) => {
                 name: user.name,
                 email: user.email,
                 role: user.role,
+                teamId: user.teamId,
                 token: generateToken(user),
             }
         );
@@ -41,7 +42,6 @@ const registerUser = async (req, res) => {
 };
 
 const loginUser = async(req, res) => {
-
         try{
             const{email, password} = req.body;
 
@@ -60,12 +60,13 @@ const loginUser = async(req, res) => {
                     return res.status(401).json({ message: 'Invalid Password' });
                   }
             }
-
+            
             return res.status(200).json({
                 _id: user._id,
                 name: user.name,
                 email: user.email,
                 role: user.role,
+                teamId: user.teamId,
                 token: generateToken(user),
               });
 
