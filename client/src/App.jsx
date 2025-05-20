@@ -1,10 +1,21 @@
-import { useState } from 'react'
-import './index.css'
+
+import { Routes, Route } from 'react-router-dom';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import Dashboard from './pages/Dashboard';
+import Chat from './pages/Chat';
+import Roster from './pages/Roster';
 
 function App() {
   return (
-    <div className="text-3xl font-bold underline text-red-500">
-      Hello Together!
+    <div className="min-h-screen bg-gray-50 text-gray-900">
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/chat" element={<Chat />} />
+        <Route path="/roster" element={<Roster />} />
+      </Routes>
     </div>
   );
 }
