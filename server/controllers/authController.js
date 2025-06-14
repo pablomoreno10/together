@@ -37,6 +37,7 @@ const registerUser = async (req, res) => {
             }
         );
     }catch(err){
+        console.error("Error in registerUser:", err);
         res.status(500).json({message: "Server error"})
     }
 };
