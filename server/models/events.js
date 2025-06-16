@@ -21,12 +21,11 @@ const eventSchema = new mongoose.Schema({
     },
     teamId: { 
         type: String, 
-        default: null 
-    },
+        required: true    },
     attending: [{ 
         type: mongoose.Schema.Types.ObjectId, ref: 'User' 
     }], 
-    createdAt: {
+    createdAt: { // Automatically set the creation date, not a good idea to set this manually...
          type: Date, 
          default: Date.now 
         }

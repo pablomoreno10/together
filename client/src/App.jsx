@@ -7,13 +7,12 @@ import Chat from './pages/Chat';
 import Roster from './pages/Roster';
 
 function App() {
-  console.log("App loaded");
-
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900">
-      <h1>Testing if App shows</h1>
+      <h1>Together FC</h1>
       <Routes>
         <Route path="/" element={<Login />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/chat" element={<Chat />} />

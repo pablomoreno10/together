@@ -7,7 +7,7 @@ const createEvent = async (req, res) => {
 
     try{
         const {title, location, date, notes} = req.body;
-        const { id: createdBy, role } = req.user;
+        const { id: createdBy, role, teamId } = req.user; //Add teamId to the destructured user object
         
         if (role !== 'captain'){
             return res(401).json({message: 'Sorry, only captains are authorized to create events.'})
@@ -18,7 +18,7 @@ const createEvent = async (req, res) => {
             date,
             notes,
             createdBy,
-            createdAt: new Date()
+            teamId, //include teamId when creating the event
         });
         
         try{
@@ -41,6 +41,33 @@ const createEvent = async (req, res) => {
         console.log("Error creating event", err.message);
         res.status(500).json({ message: 'Server error' });
     }
+};
+
+const getNextEvent = async (req, res) => {
+  try {
+    const { teamId } = req.user;
+    console.log('Team ID from user:', teamId);
+
+    const now = new Date();
+    console.log('Current server date:', now);
+
+    const nextEvent = await Event.find({ teamId, date: { $gte: now } })
+    .sort({ date: 1 })
+    .limit(1);
+
+
+    console.log('Next Event found:', nextEvent);
+
+
+    if (nextEvent.length === 0) {
+      return res.status(404).json({ message: 'No upcoming events found' });
+    }
+
+    res.status(200).json(nextEvent[0]);
+  } catch (err) {
+    console.error('Error fetching next event:', err.message);
+    res.status(500).json({ message: 'Server error' });
+  }
 };
 
 const getEvents = async (req, res) => { 
@@ -175,4 +202,4 @@ const userTrackerEvent = async (req, res) => {
   }
 };
 
-module.exports = { createEvent, getEvents, attendEvent, deleteEvent, updateEvent, userTrackerEvent };
+module.exports = { createEvent, getEvents, attendEvent, deleteEvent, updateEvent, userTrackerEvent, getNextEvent};
