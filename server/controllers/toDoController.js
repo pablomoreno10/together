@@ -3,7 +3,7 @@ const Todo = require('../models/todo');
 const createToDo = async (req, res) => {
   try {
     const { title, description, dueDate } = req.body;
-    const { id: createdBy, role } = req.user;
+    const { id: createdBy, role, teamId} = req.user;
 
     if (role !== 'captain') {
       return res.status(401).json({ message: 'Sorry, only captains can create To Dos.' });
@@ -14,7 +14,7 @@ const createToDo = async (req, res) => {
       description,
       dueDate,
       createdBy,
-      createdAt: new Date()
+      teamId
     });
 
     res.status(201).json({ todo });
