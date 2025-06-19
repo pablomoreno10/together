@@ -33,7 +33,7 @@ function Dashboard() {
     const fetchTodos = async () => {
       try {
         const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/todos`, { headers });
-        setTodos(res.data.todos); 
+        setTodos(res.data); 
       } catch (err) {
         console.error("Error loading todos:", err.message);
       }
@@ -184,7 +184,9 @@ function Dashboard() {
           {Array.isArray(todos) && todos.length > 0 ? (
             <ul className="list-disc pl-5 space-y-1">
               {todos.map(todo => (
-                <li key={todo._id}>{todo.text}</li>
+                <li key={todo._id}>{todo.title}
+                <ul><li>{todo.description}</li></ul>
+                </li>
               ))}
             </ul>
           ) : (
