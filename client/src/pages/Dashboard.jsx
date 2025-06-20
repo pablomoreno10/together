@@ -1,8 +1,9 @@
+//next step-> Componentization, should have done that at first
+
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
 function Dashboard() {
-  // State variables
   const [nextEvent, setNextEvent] = useState(null);
   const [attending, setAttending] = useState(false);
   const [attendingCount, setAttendingCount] = useState(0);
@@ -19,11 +20,9 @@ function Dashboard() {
   const [description, setDescription] = useState('');
   const [dueDate, setDueDate] = useState('');
 
-  // Token and headers
   const token = localStorage.getItem('token');
   const headers = { Authorization: `Bearer ${token}` };
 
-  // Helpers to decode JWT
   const getUserIdFromToken = (token) => {
     if (!token) return null;
     try {
@@ -44,7 +43,6 @@ function Dashboard() {
     }
   };
 
-  // Fetch data
   useEffect(() => {
     const fetchNextEvent = async () => {
       try {
@@ -73,7 +71,6 @@ function Dashboard() {
     fetchNextEvent();
   }, [token]);
 
-  // Attendance handler
  const toggleAttendance = async () => {
   try {
     const res = await axios.patch(
@@ -96,7 +93,6 @@ function Dashboard() {
   }
 };
 
-  // Event creation handler
   const handleEventSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -112,7 +108,6 @@ function Dashboard() {
     }
   };
 
-  // To-do creation handler
   const handleTodoSubmit = async (e) => {
     e.preventDefault();
     try {
