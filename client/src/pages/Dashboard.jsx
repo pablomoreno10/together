@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import DashboardHeader from '../components/DashboardHeader.jsx';
 
 function Dashboard() {
   const [nextEvent, setNextEvent] = useState(null);
@@ -134,8 +135,7 @@ function Dashboard() {
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
-      <h1 className="text-2xl font-bold mb-6">Welcome to Together FC!</h1>
-
+            <DashboardHeader />
       <div className="flex flex-col md:flex-row gap-6">
         {/* Left side (Event section only) */}
 <div className="flex-1 space-y-4">
