@@ -5,6 +5,8 @@ import axios from 'axios';
 import DashboardHeader from '../components/DashboardHeader.jsx';
 import EventCard from '../components/EventCard.jsx';
 import CreateEventForm from '../components/CreateEventForm.jsx';
+import CreateTodoForm from '../components/CreateTodoForm.jsx';
+import TodoList from '../components/TodoList.jsx';
 
 function Dashboard() {
 
@@ -122,7 +124,7 @@ function Dashboard() {
         {
           title: title.trim(),
           description: description.trim(),
-          dueDate: dueDate || null,
+          dueDate: dueDate,
         },
         { headers }
       );
@@ -140,7 +142,8 @@ function Dashboard() {
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
-            <DashboardHeader />
+      
+      <DashboardHeader />
 
       
       <div className="flex flex-col md:flex-row gap-6">
@@ -176,68 +179,37 @@ function Dashboard() {
         </div>
 
 
-  <div className="flex-1 space-y-4">
-    {/* Create To-Do Button */}
-    {getUserRoleFromToken(token) === 'captain' && !showTodoForm && (
-      <button
-        onClick={() => setShowTodoForm(true)}
-        className="px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700"
-      >
-        + Create To-Do
-      </button>
-    )}
+        <div className="flex-1 space-y-4">
+          {/* Create To-Do Button */}
+            {isCaptain && !showTodoForm && (
+              <button
+                onClick={() => setShowTodoForm(true)}
+                className="px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700"
+              >
+                + Create To-Do
+              </button>
+            )}
 
-    {/* To-Do Form */}
-    {getUserRoleFromToken(token) === 'captain' && showTodoForm && (
-      <form onSubmit={handleTodoSubmit} className="bg-white p-4 rounded shadow space-y-2">
-        <input
-          type="text"
-          placeholder="Title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          required
-          className="w-full p-2 border"
-        />
-        <textarea
-          placeholder="Description (optional)"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          className="w-full p-2 border"
-        />
-        <input
-          type="datetime-local"
-          value={dueDate}
-          onChange={(e) => setDueDate(e.target.value)}
-          className="w-full p-2 border"
-        />
-        <div className="flex gap-2">
-          <button type="submit" className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Create</button>
-          <button type="button" onClick={() => setShowTodoForm(false)} className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">Cancel</button>
+            {/* To-Do Form */}
+            {isCaptain && showTodoForm && (
+              <CreateTodoForm
+                onSubmit={handleTodoSubmit}
+                onCancel={() => setShowTodoForm(false)}
+                title={title}
+                setTitle={setTitle}
+                description={description}
+                setDescription={setDescription}
+                dueDate={dueDate}
+                setDueDate={setDueDate}
+              />
+            )}
+
+            <TodoList todos={todos} />
+
         </div>
-      </form>
-    )}
-
-    {/* To-Do List */}
-    <div className="bg-white p-6 rounded-lg shadow-lg">
-      <h2 className="text-xl font-semibold mb-2">To-Do List</h2>
-      {Array.isArray(todos) && todos.length > 0 ? (
-        <ul className="list-disc pl-5 space-y-1">
-          {todos.map((todo) => (
-            <li key={todo._id}>
-              {todo.title}
-              <ul><li>{todo.description}</li></ul>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p>No to-dos available for now.</p>
-      )}
-    </div>
-  </div>
-  </div>
       </div>
-    );
-  }
+    </div>
+  );
+}
 
 export default Dashboard;
-

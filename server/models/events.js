@@ -23,17 +23,13 @@ const eventSchema = new mongoose.Schema({
         type: String, 
         required: true    },
     attending: [{ 
-        type: mongoose.Schema.Types.ObjectId, ref: 'User' 
-    }], 
-    createdAt: { // Automatically set the creation date, not a good idea to set this manually...
-         type: Date, 
-         default: Date.now 
-        }
-    },
-    {
-    timestamps: true
+        type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
+    
+    }, 
+    
+    { timestamps: true }
 
-});
+);
 
 module.exports = mongoose.model('Event', eventSchema);
   
