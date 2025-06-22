@@ -1,10 +1,13 @@
 //next step-> Componentization, should have done that at first
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react'; 
 import axios from 'axios';
 import DashboardHeader from '../components/DashboardHeader.jsx';
+import EventCard from '../components/EventCard.jsx';
+import CreateEventForm from '../components/CreateEventForm.jsx';
 
 function Dashboard() {
+
   const [nextEvent, setNextEvent] = useState(null);
   const [attending, setAttending] = useState(false);
   const [attendingCount, setAttendingCount] = useState(0);
@@ -43,6 +46,8 @@ function Dashboard() {
       return null;
     }
   };
+
+  const isCaptain = getUserRoleFromToken(token) === 'captain';
 
   useEffect(() => {
     const fetchNextEvent = async () => {
@@ -136,84 +141,41 @@ function Dashboard() {
   return (
     <div className="min-h-screen bg-gray-50 p-6">
             <DashboardHeader />
+
+      
       <div className="flex flex-col md:flex-row gap-6">
-        {/* Left side (Event section only) */}
-<div className="flex-1 space-y-4">
-  {/* Create Event Button */}
-  {getUserRoleFromToken(token) === 'captain' && !showEventForm && (
-    <button
-      onClick={() => setShowEventForm(true)}
-      className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-    >
-      + Create Event
-    </button>
-  )}
+        {/* Left: Event */}
+        <div className="flex-1 space-y-4">
+          {isCaptain && !showEventForm && (
+            <button onClick={() => setShowEventForm(true)} className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+              + Create Event
+            </button>
+          )}
 
-  {/* Event Form */}
-  {getUserRoleFromToken(token) === 'captain' && showEventForm && (
-    <form onSubmit={handleEventSubmit} className="bg-white p-4 rounded shadow space-y-2">
-      <input
-        type="text"
-        placeholder="Title"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        required
-        className="w-full p-2 border"
-      />
-      <input
-        type="text"
-        placeholder="Location"
-        value={location}
-        onChange={(e) => setLocation(e.target.value)}
-        required
-        className="w-full p-2 border"
-      />
-      <input
-        type="datetime-local"
-        value={date}
-        onChange={(e) => setDate(e.target.value)}
-        required
-        className="w-full p-2 border"
-      />
-      <textarea
-        placeholder="Notes"
-        value={notes}
-        onChange={(e) => setNotes(e.target.value)}
-        className="w-full p-2 border"
-      />
-      <div className="flex gap-2">
-        <button type="submit" className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Create</button>
-        <button type="button" onClick={() => setShowEventForm(false)} className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">Cancel</button>
-      </div>
-    </form>
-  )}
+          {isCaptain && showEventForm && (
+            <CreateEventForm
+              onSubmit={handleEventSubmit}
+              onCancel={() => setShowEventForm(false)}
+              title={title}
+              setTitle={setTitle}
+              location={location}
+              setLocation={setLocation}
+              date={date}
+              setDate={setDate}
+              notes={notes}
+              setNotes={setNotes}
+            />
+          )}
 
-  {/* Next Event Card */}
-  <div className="bg-white p-6 rounded-lg shadow-lg">
-    <h2 className="text-xl font-semibold mb-2">Next Event</h2>
-    {nextEvent ? (
-      <>
-        <p className="text-lg font-bold">{nextEvent.title}</p>
-        <p><strong>Date:</strong> {new Date(nextEvent.date).toLocaleString()}</p>
-        <p><strong>Location:</strong> {nextEvent.location}</p>
-        <p><strong>Notes:</strong> {nextEvent.notes || '—'}</p>
-        <p><strong>Attending:</strong> {attending ? attendingCount : attendingCount - 1}</p>
-        <button
-          onClick={toggleAttendance}
-          className={`mt-4 px-4 py-2 rounded ${
-            attending ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600'
-          } text-white font-semibold`}
-        >
-          {attending ? "Not Going ❌" : "I'm Going ✅"}
-        </button>
-      </>
-    ) : (
-      <p>No upcoming events.</p>
-    )}
-  </div>
-</div>
+          <EventCard
+            nextEvent={nextEvent}
+            attending={attending}
+            attendingCount={attendingCount}
+            toggleAttendance={toggleAttendance}
+          />
+        </div>
 
-        {/* Right side (To-Do List + Button) */}
+
   <div className="flex-1 space-y-4">
     {/* Create To-Do Button */}
     {getUserRoleFromToken(token) === 'captain' && !showTodoForm && (
