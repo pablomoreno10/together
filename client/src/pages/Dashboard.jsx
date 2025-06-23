@@ -51,6 +51,9 @@ function Dashboard() {
 
   const isCaptain = getUserRoleFromToken(token) === 'captain';
 
+  console.log("isCaptain:", isCaptain);
+
+
   useEffect(() => {
     const fetchNextEvent = async () => {
       try {
@@ -138,6 +141,16 @@ function Dashboard() {
     }
   };
 
+
+  const handleDeleteTodo = async (id) => {
+    try {
+      await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/api/todos/${id}`, { headers });
+      setTodos((prev) => prev.filter((todo) => todo._id !== id));
+    } catch (err) {
+      console.error('Error deleting todo:', err.message);
+    }
+  };
+  
   if (loading) return <p className="p-6">Loading...</p>;
 
   return (
@@ -154,6 +167,8 @@ function Dashboard() {
               + Create Event
             </button>
           )}
+
+
 
           {isCaptain && showEventForm && (
             <CreateEventForm
@@ -204,7 +219,11 @@ function Dashboard() {
               />
             )}
 
-            <TodoList todos={todos} />
+            <TodoList 
+            todos={todos}
+            isCaptain={isCaptain}
+            onDelete={handleDeleteTodo}
+             />
 
         </div>
       </div>
