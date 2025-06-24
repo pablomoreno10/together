@@ -19,6 +19,7 @@ connectDB();
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/todos', require('./routes/toDos'));
 app.use('/api/events', require('./routes/events'));
+app.use('/api/users', require('./routes/users'));
 
 
 server.listen(3000, () => console.log('Sever running on port 3000'));
