@@ -1,4 +1,4 @@
-function EventCard({ nextEvent, attending, attendingCount, toggleAttendance }) {
+function EventCard({ nextEvent, attending, attendingCount, toggleAttendance, isCaptain, onDelete }) {
   if (!nextEvent) return <p>No upcoming events.</p>;
 
   return (
@@ -24,7 +24,18 @@ function EventCard({ nextEvent, attending, attendingCount, toggleAttendance }) {
         } text-white font-semibold`}
       >
         {attending ? "Not Going ❌" : "I'm Going ✅"}
+
       </button>
+
+     {isCaptain && (
+        <button
+          onClick={() => onDelete(nextEvent._id)}
+          className="mt-2 ml-4 px-4 py-2 rounded bg-red-500 hover:bg-red-600 text-white font-semibold"
+        >
+          Delete Event 🗑️
+        </button>
+      )}
+
     </div>
   );
 }

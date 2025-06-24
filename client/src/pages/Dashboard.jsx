@@ -141,6 +141,15 @@ function Dashboard() {
     }
   };
 
+  const handleDeleteEvent = async (id) => {
+  try {
+    await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/api/events/${id}`, { headers });
+    window.location.reload(); 
+  } catch (err) {
+    console.error("Error deleting event:", err.message);
+  }
+};
+
 
   const handleDeleteTodo = async (id) => {
     try {
@@ -190,6 +199,8 @@ function Dashboard() {
             attending={attending}
             attendingCount={attendingCount}
             toggleAttendance={toggleAttendance}
+            isCaptain={isCaptain}
+            onDelete={handleDeleteEvent}
           />
         </div>
 
