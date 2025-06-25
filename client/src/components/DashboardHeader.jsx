@@ -3,8 +3,9 @@ import { Link } from "react-router-dom";
 function DashboardHeader() {
   return (
     <nav className="flex justify-between items-center bg-white p-4 rounded shadow mb-6">
-      <h1 className="text-xl font-bold">Team Dashboard</h1>
+      <h1 className="text-xl font-bold">Team Links</h1>
       <div className="flex space-x-4">
+        <Link to="/dashboard" className="text-blue-600 hover:underline">Dashboard</Link>
         <Link to="/roster" className="text-blue-600 hover:underline">Roster</Link>
         <Link to="/contact" className="text-blue-600 hover:underline">Contact</Link>
         <Link to="/chat" className="text-blue-600 hover:underline">Chat</Link>

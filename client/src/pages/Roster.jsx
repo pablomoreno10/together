@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import DashboardHeader from '../components/DashboardHeader.jsx';
+
 
 function Roster() {
   const [users, setUsers] = useState([]);
@@ -20,8 +22,9 @@ function Roster() {
     fetchTeam();
   }, [token]);
 
-  return (
+  return (    
     <div className="min-h-screen bg-gray-50 p-6">
+      <DashboardHeader/>
       <h1 className="text-2xl font-bold mb-4">Team Roster</h1>
       <div className="bg-white rounded-lg shadow p-4">
         <ul className="divide-y divide-gray-200">
