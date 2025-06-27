@@ -4,12 +4,12 @@ const {protected} = require('../middleware/authMiddleware');
 const Message = require('../models/chat');
 
 
-router.get(':teamId', protected, async (req, res) => {
+router.get('/:teamId', protected, async (req, res) => {
     try {
         const teamId = req.params.teamId;
 
         if(!teamId){
-            return res.status()
+            return res.status(400).json({teamId: 'Team is required.'})
         }
 
         const messages = await Message.find({teamId})
