@@ -1,8 +1,6 @@
 //const jwt = require('jsonwebtoken'); will add authentication later on
 const Message = require("../models/chat");
 
-
-
 function handlerSocket(io) {
     io.on('connection', (socket) => {
       console.log('User connected:', socket.id);
