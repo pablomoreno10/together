@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from 'react';
 import io from 'socket.io-client';
 import axios from 'axios';
 import { getTokenPayload } from '../utils/Auth'; 
+import DashboardHeader from '../components/DashboardHeader.jsx';
 
 
 const socket = io(import.meta.env.VITE_BACKEND_URL); 
@@ -70,7 +71,9 @@ function Chat() {
   };
 
   return (
+
     <div className="min-h-screen bg-gray-100 p-6">
+      <DashboardHeader/>
       <div className="max-w-2xl mx-auto bg-white rounded shadow p-4 h-[70vh] flex flex-col">
         <div className="flex-1 overflow-y-auto space-y-2 mb-4">
           {messages.map((msg) => (

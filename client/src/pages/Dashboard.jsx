@@ -7,7 +7,7 @@ import EventCard from '../components/EventCard.jsx';
 import CreateEventForm from '../components/CreateEventForm.jsx';
 import CreateTodoForm from '../components/CreateTodoForm.jsx';
 import TodoList from '../components/TodoList.jsx';
-import { getUserRoleFromToken, getUserIdFromToken } from '../utils/Auth';
+import { getTokenPayload } from '../utils/Auth';
 
 function Dashboard() {
 
@@ -30,7 +30,9 @@ function Dashboard() {
   const token = localStorage.getItem('token');
   const headers = { Authorization: `Bearer ${token}` };
 
-  const isCaptain = getUserRoleFromToken(token) === 'captain';
+  const payload = getTokenPayload(token);
+
+  const isCaptain = payload?.role === 'captain';
 
   useEffect(() => {
     const fetchNextEvent = async () => {
@@ -39,7 +41,7 @@ function Dashboard() {
         const event = res.data;
         setNextEvent(event);
         setAttendingCount(event.attending?.length || 0);
-        setAttending(event.attending?.includes(getUserIdFromToken(token)) || false);
+        setAttending(event.attending?.includes(payload?.id) || false);
       } catch (err) {
         console.error("Error loading event:", err.message);
       } finally {
