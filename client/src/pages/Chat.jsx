@@ -1,75 +1,95 @@
-import { useEffect, useState } from 'react';
-import { io } from 'socket.io-client';
+import { useEffect, useState, useRef } from 'react';
+import io from 'socket.io-client';
 import axios from 'axios';
+import { getTokenPayload } from '../utils/Auth'; 
+
 
 const socket = io(import.meta.env.VITE_BACKEND_URL); 
+
 function Chat() {
   const [messages, setMessages] = useState([]);
   const [text, setText] = useState('');
-  const [user, setUser] = useState(null); 
-  const [teamId, setTeamId] = useStSate(null); 
+  const messagesEndRef = useRef(null);
+
+  const token = localStorage.getItem('token');
+  const { id: userId, name, teamId } = getTokenPayload(token);
+  console.log(getTokenPayload(token));
+
+
+  const headers = { Authorization: `Bearer ${token}` };
 
   useEffect(() => {
-    const fetchUser = async () => {
-      const { data } = await axios.get('/api/users/me', {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`
-        }
-      });
-      setUser(data);
-      setTeamId(data.team); 
-      socket.emit('joinRoom', data.team);
-    };
+    socket.emit('join_room', teamId);
 
-    fetchUser();
-
-    socket.on('receiveMessage', (message) => {
+    socket.on('newMessage', (message) => {
       setMessages((prev) => [...prev, message]);
     });
 
-    return () => {
-      socket.off('receiveMessage');
-    };
-  }, []);
+    return () => socket.disconnect();
+  }, [teamId]);
 
-  const sendMessage = () => {
-    if (text.trim() === '') return;
-    const messageData = {
-      sender: user.name,
-      text,
-      team: teamId,
-      time: new Date().toLocaleTimeString()
+  useEffect(() => {
+    // Fetch existing messages on load
+    const fetchMessages = async () => {
+      try {
+        const res = await axios.get(
+          `${import.meta.env.VITE_BACKEND_URL}/api/chat/${teamId}`,
+          { headers }
+        );
+        setMessages(res.data);
+      } catch (err) {
+        console.error('Failed to load messages:', err.message);
+      }
     };
-    socket.emit('sendMessage', messageData);
-    setMessages((prev) => [...prev, messageData]);
-    setText('');
+    fetchMessages();
+  }, [teamId]);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
+
+  const sendMessage = async () => {
+    if (!text.trim()) return;
+    try {
+      await socket.emit('send_message', {
+        teamId,
+        senderId: userId,
+        text,
+      });
+      setText('');
+    } catch (err) {
+      console.error('Failed to send message:', err.message);
+    }
   };
 
   return (
-    <div className="p-4 max-w-2xl mx-auto">
-      <h2 className="text-xl font-bold mb-4">Team Chat</h2>
-      <div className="border rounded p-4 h-96 overflow-y-scroll bg-white">
-        {messages.map((msg, idx) => (
-          <div key={idx} className="mb-2">
-            <span className="font-semibold">{msg.sender}: </span>
-            <span>{msg.text}</span>
-            <span className="text-xs text-gray-400 ml-2">{msg.time}</span>
-          </div>
-        ))}
-      </div>
-      <div className="mt-4 flex">
-        <input
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          placeholder="Type a message..."
-          className="flex-grow border rounded px-3 py-2 mr-2"
-        />
-        <button
-          onClick={sendMessage}
-          className="bg-blue-600 text-white px-4 py-2 rounded"
-        >
-          Send
-        </button>
+    <div className="min-h-screen bg-gray-100 p-6">
+      <div className="max-w-2xl mx-auto bg-white rounded shadow p-4 h-[70vh] flex flex-col">
+        <div className="flex-1 overflow-y-auto space-y-2 mb-4">
+          {messages.map((msg) => (
+            <div key={msg._id} className="bg-gray-200 p-2 rounded">
+              <p className="text-sm font-semibold">{msg.sender}</p>
+              <p>{msg.text}</p>
+              <p className="text-xs text-gray-500">{new Date(msg.timestamp).toLocaleTimeString()}</p>
+            </div>
+          ))}
+          <div ref={messagesEndRef} />
+        </div>
+        <div className="flex gap-2">
+          <input
+            className="flex-1 border rounded p-2"
+            placeholder="Type a message..."
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
+          />
+          <button
+            onClick={sendMessage}
+            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          >
+            Send
+          </button>
+        </div>
       </div>
     </div>
   );

@@ -7,6 +7,7 @@ import EventCard from '../components/EventCard.jsx';
 import CreateEventForm from '../components/CreateEventForm.jsx';
 import CreateTodoForm from '../components/CreateTodoForm.jsx';
 import TodoList from '../components/TodoList.jsx';
+import { getUserRoleFromToken, getUserIdFromToken } from '../utils/Auth';
 
 function Dashboard() {
 
@@ -29,30 +30,7 @@ function Dashboard() {
   const token = localStorage.getItem('token');
   const headers = { Authorization: `Bearer ${token}` };
 
-  const getUserIdFromToken = (token) => {
-    if (!token) return null;
-    try {
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      return payload.id || payload._id;
-    } catch {
-      return null;
-    }
-  };
-
-  const getUserRoleFromToken = (token) => {
-    if (!token) return null;
-    try {
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      return payload.role;
-    } catch {
-      return null;
-    }
-  };
-
   const isCaptain = getUserRoleFromToken(token) === 'captain';
-
-  console.log("isCaptain:", isCaptain);
-
 
   useEffect(() => {
     const fetchNextEvent = async () => {

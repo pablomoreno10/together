@@ -5,7 +5,7 @@ const allowedEmails = require('../utils/allowedEmails.js');
 //generate client token
 
 const generateToken = (user) => {
-    return jwt.sign({ id: user.id, role: user.role}, process.env.JWT_SECRET,{
+    return jwt.sign({ id: user.id, role: user.role, name: user.name, teamId: user.teamId}, process.env.JWT_SECRET,{
         expiresIn: '7d', 
     }); 
 };
