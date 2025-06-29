@@ -21,12 +21,18 @@ function Chat() {
   useEffect(() => {
     socket.emit('join_room', teamId);
 
-    socket.on('newMessage', (message) => {
+    const handleNewMessage = (message) => {
       setMessages((prev) => [...prev, message]);
-    });
+    };
 
-    return () => socket.disconnect();
+    socket.on('newMessage', handleNewMessage);
+
+    return () => {
+      socket.off('newMessage', handleNewMessage); 
+      
+    };
   }, [teamId]);
+
 
   useEffect(() => {
     // Fetch existing messages on load
@@ -36,6 +42,7 @@ function Chat() {
           `${import.meta.env.VITE_BACKEND_URL}/api/chat/${teamId}`,
           { headers }
         );
+        console.log('messages: ', res.data);
         setMessages(res.data);
       } catch (err) {
         console.error('Failed to load messages:', err.message);
@@ -68,7 +75,7 @@ function Chat() {
         <div className="flex-1 overflow-y-auto space-y-2 mb-4">
           {messages.map((msg) => (
             <div key={msg._id} className="bg-gray-200 p-2 rounded">
-              <p className="text-sm font-semibold">{msg.sender}</p>
+              <p className="text-sm font-semibold">{msg.sender?.name || 'Unknown'}</p>
               <p>{msg.text}</p>
               <p className="text-xs text-gray-500">{new Date(msg.timestamp).toLocaleTimeString()}</p>
             </div>
