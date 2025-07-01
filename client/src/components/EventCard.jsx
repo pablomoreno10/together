@@ -11,9 +11,7 @@ function EventCard({ nextEvent, attending, attendingCount, attendeeList, toggleA
       <p><strong>Attending:</strong> {attendingCount} confirmed</p>
 
       {Array.isArray(attendeeList) && attendeeList.length > 0 && (
-        <div className="mt-2 text-sm text-gray-700">
-          <strong>Attendees:</strong> {attendeeList.map(user => user.name).join(', ')}
-        </div>
+        <p><strong>Attendees:</strong> {attendeeList.map(user => user.name).join(', ')}</p>
       )}
 
       <button
