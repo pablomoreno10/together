@@ -18,7 +18,7 @@ router.get('/next', protected, getNextEvent);
 router.patch('/:id/attend', protected, attendEvent); //Attend/unattend event
 router.put('/:id', protected, updateEvent);     
 router.delete('/:id', protected, deleteEvent);   
-router.get('/tracker/:id', protected, userTrackerEvent); //View attendees
+router.get('/:id/tracker', protected, userTrackerEvent);
 
 module.exports = router;
 

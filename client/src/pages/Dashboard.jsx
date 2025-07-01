@@ -1,6 +1,4 @@
-//next step-> Componentization, should have done that at first
-
-import { useEffect, useState } from 'react'; 
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import DashboardHeader from '../components/DashboardHeader.jsx';
 import EventCard from '../components/EventCard.jsx';
@@ -10,10 +8,11 @@ import TodoList from '../components/TodoList.jsx';
 import { getTokenPayload } from '../utils/Auth';
 
 function Dashboard() {
-
   const [nextEvent, setNextEvent] = useState(null);
   const [attending, setAttending] = useState(false);
   const [attendingCount, setAttendingCount] = useState(0);
+  const [attendeeList, setAttendeeList] = useState([]);
+
   const [todos, setTodos] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -31,7 +30,6 @@ function Dashboard() {
   const headers = { Authorization: `Bearer ${token}` };
 
   const payload = getTokenPayload(token);
-
   const isCaptain = payload?.role === 'captain';
 
   useEffect(() => {
@@ -62,27 +60,40 @@ function Dashboard() {
     fetchNextEvent();
   }, [token]);
 
- const toggleAttendance = async () => {
-  try {
-    const res = await axios.patch(
-      `${import.meta.env.VITE_BACKEND_URL}/api/events/${nextEvent._id}/attend`,
-      {},
-      { headers }
-    );
+  useEffect(() => {
+    const fetchAttendeeNames = async () => {
+      if (!nextEvent?._id) return;
+      try {
+        const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/events/${nextEvent._id}/tracker`, { headers });
+        setAttendeeList(res.data.attending);
+      } catch (err) {
+        console.error('Error fetching attendee list:', err.message);
+      }
+    };
 
-    const { attendingCount, attending } = res.data; 
+    fetchAttendeeNames();
+  }, [nextEvent]);
 
-    setAttendingCount(attendingCount);
-    setAttending(attending); 
+  const toggleAttendance = async () => {
+    try {
+      const res = await axios.patch(
+        `${import.meta.env.VITE_BACKEND_URL}/api/events/${nextEvent._id}/attend`,
+        {},
+        { headers }
+      );
 
-    setNextEvent((prev) => ({
-      ...prev,
-      attending: attending 
-    }));
-  } catch (err) {
-    console.error("Error toggling attendance:", err.message);
-  }
-};
+      const { attendingCount, attending } = res.data;
+      setAttendingCount(attendingCount);
+      setAttending(attending);
+
+      setNextEvent((prev) => ({
+        ...prev,
+        attending: attending,
+      }));
+    } catch (err) {
+      console.error("Error toggling attendance:", err.message);
+    }
+  };
 
   const handleEventSubmit = async (e) => {
     e.preventDefault();
@@ -122,14 +133,13 @@ function Dashboard() {
   };
 
   const handleDeleteEvent = async (id) => {
-  try {
-    await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/api/events/${id}`, { headers });
-    window.location.reload(); 
-  } catch (err) {
-    console.error("Error deleting event:", err.message);
-  }
-};
-
+    try {
+      await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/api/events/${id}`, { headers });
+      window.location.reload();
+    } catch (err) {
+      console.error("Error deleting event:", err.message);
+    }
+  };
 
   const handleDeleteTodo = async (id) => {
     try {
@@ -139,15 +149,13 @@ function Dashboard() {
       console.error('Error deleting todo:', err.message);
     }
   };
-  
+
   if (loading) return <p className="p-6">Loading...</p>;
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
-      
       <DashboardHeader />
 
-      
       <div className="flex flex-col md:flex-row gap-6">
         {/* Left: Event */}
         <div className="flex-1 space-y-4">
@@ -156,8 +164,6 @@ function Dashboard() {
               + Create Event
             </button>
           )}
-
-
 
           {isCaptain && showEventForm && (
             <CreateEventForm
@@ -178,44 +184,41 @@ function Dashboard() {
             nextEvent={nextEvent}
             attending={attending}
             attendingCount={attendingCount}
+            attendeeList={attendeeList}
             toggleAttendance={toggleAttendance}
             isCaptain={isCaptain}
             onDelete={handleDeleteEvent}
           />
         </div>
 
-
         <div className="flex-1 space-y-4">
-          {/* Create To-Do Button */}
-            {isCaptain && !showTodoForm && (
-              <button
-                onClick={() => setShowTodoForm(true)}
-                className="px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700"
-              >
-                + Create To-Do
-              </button>
-            )}
+          {isCaptain && !showTodoForm && (
+            <button
+              onClick={() => setShowTodoForm(true)}
+              className="px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700"
+            >
+              + Create To-Do
+            </button>
+          )}
 
-            {/* To-Do Form */}
-            {isCaptain && showTodoForm && (
-              <CreateTodoForm
-                onSubmit={handleTodoSubmit}
-                onCancel={() => setShowTodoForm(false)}
-                title={title}
-                setTitle={setTitle}
-                description={description}
-                setDescription={setDescription}
-                dueDate={dueDate}
-                setDueDate={setDueDate}
-              />
-            )}
+          {isCaptain && showTodoForm && (
+            <CreateTodoForm
+              onSubmit={handleTodoSubmit}
+              onCancel={() => setShowTodoForm(false)}
+              title={title}
+              setTitle={setTitle}
+              description={description}
+              setDescription={setDescription}
+              dueDate={dueDate}
+              setDueDate={setDueDate}
+            />
+          )}
 
-            <TodoList 
+          <TodoList
             todos={todos}
             isCaptain={isCaptain}
             onDelete={handleDeleteTodo}
-             />
-
+          />
         </div>
       </div>
     </div>

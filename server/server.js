@@ -1,6 +1,7 @@
 const http = require('http');
 const {Server} = require('socket.io');
-
+const dotenv = require('dotenv');
+dotenv.config();
 const express = require('express');
 const cors = require('cors');
 const app = express();
@@ -17,10 +18,7 @@ const io = new Server(server, {
 });
 const {handlerSocket} = require('./sockets/sockerController');
 handlerSocket(io);
-
-const dotenv = require('dotenv');
 const connectDB = require('./config/db');
-dotenv.config();
 app.use(express.json()); 
 connectDB();
 

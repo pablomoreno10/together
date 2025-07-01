@@ -1,4 +1,4 @@
-function EventCard({ nextEvent, attending, attendingCount, toggleAttendance, isCaptain, onDelete }) {
+function EventCard({ nextEvent, attending, attendingCount, attendeeList, toggleAttendance, isCaptain, onDelete }) {
   if (!nextEvent) return <p>No upcoming events.</p>;
 
   return (
@@ -8,12 +8,11 @@ function EventCard({ nextEvent, attending, attendingCount, toggleAttendance, isC
       <p><strong>Date:</strong> {new Date(nextEvent.date).toLocaleString()}</p>
       <p><strong>Location:</strong> {nextEvent.location}</p>
       <p><strong>Notes:</strong> {nextEvent.notes || '—'}</p>
-      <p><strong>Attending:</strong> {attendingCount}</p>
+      <p><strong>Attending:</strong> {attendingCount} confirmed</p>
 
-      {/* List of attendees (Optional future feature) */}
-      {Array.isArray(nextEvent.attending) && nextEvent.attending.length > 0 && (
+      {Array.isArray(attendeeList) && attendeeList.length > 0 && (
         <div className="mt-2 text-sm text-gray-700">
-          <strong>Attendees:</strong> {nextEvent.attending.join(', ')}
+          <strong>Attendees:</strong> {attendeeList.map(user => user.name).join(', ')}
         </div>
       )}
 
@@ -24,10 +23,9 @@ function EventCard({ nextEvent, attending, attendingCount, toggleAttendance, isC
         } text-white font-semibold`}
       >
         {attending ? "Not Going ❌" : "I'm Going ✅"}
-
       </button>
 
-     {isCaptain && (
+      {isCaptain && (
         <button
           onClick={() => onDelete(nextEvent._id)}
           className="mt-2 ml-4 px-4 py-2 rounded bg-red-500 hover:bg-red-600 text-white font-semibold"
@@ -35,7 +33,6 @@ function EventCard({ nextEvent, attending, attendingCount, toggleAttendance, isC
           Delete Event 🗑️
         </button>
       )}
-
     </div>
   );
 }

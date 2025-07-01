@@ -84,7 +84,7 @@ const getEvents = async (req, res) => {
     try {
 
       const { id } = req.params; 
-      const { id: userId } = req.user;
+      const { id: userId} = req.user;
   
       const event = await Event.findById(id);
   
@@ -169,28 +169,25 @@ const updateEvent = async (req, res) => {
 const userTrackerEvent = async (req, res) => {
   try {
     const { id } = req.params;
-    const { teamId } = req.user; 
+    const { teamId } = req.user;
 
     const event = await Event.findById(id);
     if (!event) {
       return res.status(404).json({ message: 'Event not found' });
     }
 
-    const allUsers = await User.find({ teamId }, 'name email'); 
-
-
-    //Let's turn attending into a set to then use has which results in an O(1) search instead of a linear search!
-
+    const allUsers = await User.find({ teamId }, 'name email');
     const attendingSet = new Set(event.attending.map(id => id.toString()));
 
     const attending = [];
     const notAttending = [];
 
     allUsers.forEach(user => {
-      if (attendingSet.has(user._id.toString())) {
-        attending.push(user);
+      const userId = user._id.toString();
+      if (attendingSet.has(userId)) {
+        attending.push({ name: user.name, email: user.email });
       } else {
-        notAttending.push(user);
+        notAttending.push({ name: user.name, email: user.email });
       }
     });
 
