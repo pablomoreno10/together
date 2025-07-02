@@ -21,6 +21,16 @@ handlerSocket(io);
 const connectDB = require('./config/db');
 app.use(express.json()); 
 connectDB();
+const rateLimit = require('express-rate-limit');
+const globalLimiter = rateLimit({
+  windowMs: 1 * 60 * 1000, 
+  max: 100,
+  message: 'Too many requests. please try again later',
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+app.use(globalLimiter);
 
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/todos', require('./routes/toDos'));
