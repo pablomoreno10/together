@@ -1,5 +1,7 @@
 const Message = require("../models/chat");
 
+const userTimeStamps = {};
+
 function handlerSocket(io) {
     io.on('connection', (socket) => {
       console.log('User connected:', socket.id);
@@ -10,6 +12,28 @@ function handlerSocket(io) {
       });
   
       socket.on('send_message', async ({ teamId, senderId, text }) => {
+
+        const now = new Date();
+        const noMessage = 3;
+        const windowMs = 10 * 1000;
+
+        if (!userTimeStamps[socket.id]) {
+          userTimeStamps[socket.id] = [];
+        };
+
+        userTimeStamps[socket.id] = userTimeStamps[socket.id].filter(
+        timestamp => now - timestamp < windowMs
+        );
+
+        if (userTimeStamps[socket.id].length >= noMessage) {
+          socket.emit('rate_limit', {
+            message: 'You are sending messages too fast. Please wait.',
+          });
+          return;
+        };
+
+        userTimeStamps[socket.id].push(now);
+
         try{
 
           const message = await Message.create({

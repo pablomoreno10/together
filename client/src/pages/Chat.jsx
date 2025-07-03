@@ -28,6 +28,10 @@ function Chat() {
 
     socket.on('newMessage', handleNewMessage);
 
+    socket.on('rate_limit', ({ message }) => {
+        alert(message);
+    });
+
     return () => {
       socket.off('newMessage', handleNewMessage); 
       
