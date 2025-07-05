@@ -1,4 +1,5 @@
 const Todo = require('../models/todo');
+const mongoose = require('mongoose');
 
 const createToDo = async (req, res) => {
   try {
@@ -88,6 +89,4 @@ const toggleToDoCompletion = async (req, res) => {
   }
 };
 
-
-
-module.exports = { createToDo, getToDo, deleteToDo, toggleToDoCompletion};
+module.exports = { createToDo, getToDo, deleteToDo, toggleToDoCompletion, getTodoCompletionTimeline };

@@ -1,6 +1,6 @@
 //modular routes to keep app more organized
 const { protected } = require('../middleware/authMiddleware');
-const { createToDo, getToDo, deleteToDo, toggleToDoCompletion  } = require('../controllers/toDoController');
+const { createToDo, getToDo, deleteToDo, toggleToDoCompletion } = require('../controllers/toDoController');
 const express = require('express');
 const router = express.Router();
 

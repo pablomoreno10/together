@@ -37,6 +37,7 @@ app.use('/api/todos', require('./routes/toDos'));
 app.use('/api/events', require('./routes/events'));
 app.use('/api/users', require('./routes/users'));
 app.use('/api/chat', require('./routes/chat'));
+app.use('/api/graph', require('./routes/graph'));
 
 
 server.listen(3000, () => console.log('Sever running on port 3000'));
