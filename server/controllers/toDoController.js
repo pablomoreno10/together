@@ -27,7 +27,7 @@ const createToDo = async (req, res) => {
 
 const getToDo = async (req, res) => {
   try {
-    const todos = await Todo.find().sort({ createdAt: -1 });
+    const todos = await Todo.find().populate('completedBy', 'name').sort({ createdAt: -1 });
     res.status(200).json(todos);
   } catch (err) {
     console.error('Get ToDo Error:', err.message);
@@ -65,7 +65,7 @@ const toggleToDoCompletion = async (req, res) => {
     const { id } = req.params;
     const { id: userId } = req.user;
 
-    const todo = await ToDo.findById(id);
+    const todo = await Todo.findById(id);
     if (!todo) {
       return res.status(404).json({ message: 'To-Do not found' });
     }
@@ -80,13 +80,13 @@ const toggleToDoCompletion = async (req, res) => {
 
     await todo.save();
 
-    res.status(200).json({ message: hasCompleted ? 'Marked as incomplete' : 'Marked as complete', completedCount: todo.completedBy.length
-    });
+    const updatedTodo = await Todo.findById(id).populate('completedBy', 'name');
 
+    res.status(200).json(updatedTodo);
   } catch (err) {
     console.error('Toggle completion error:', err.message);
     res.status(500).json({ message: 'Server error' });
   }
 };
 
-module.exports = { createToDo, getToDo, deleteToDo, toggleToDoCompletion, getTodoCompletionTimeline };
+module.exports = { createToDo, getToDo, deleteToDo, toggleToDoCompletion };

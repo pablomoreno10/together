@@ -14,7 +14,6 @@ function Dashboard() {
   const [attendeeList, setAttendeeList] = useState([]);
 
   const [todos, setTodos] = useState([]);
-  const [loading, setLoading] = useState(true);
 
   const [showEventForm, setShowEventForm] = useState(false);
   const [showTodoForm, setShowTodoForm] = useState(false);
@@ -95,6 +94,27 @@ function Dashboard() {
     }
   };
 
+  const toggleTodoCompletion = async (todoId) => {
+  try {
+    const res = await axios.patch(
+      `${import.meta.env.VITE_BACKEND_URL}/api/todos/${todoId}/complete`,
+      {},
+      { headers }
+    );
+
+    const updatedTodo = res.data;
+
+    setTodos((prevTodos) =>
+      prevTodos.map((todo) =>
+        todo._id === updatedTodo._id ? updatedTodo : todo
+      )
+    );
+  } catch (err) {
+    console.error('Error toggling todo completion:', err.message);
+  }
+  };
+
+
   const handleEventSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -149,8 +169,6 @@ function Dashboard() {
       console.error('Error deleting todo:', err.message);
     }
   };
-
-  if (loading) return <p className="p-6">Loading...</p>;
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
@@ -218,6 +236,8 @@ function Dashboard() {
             todos={todos}
             isCaptain={isCaptain}
             onDelete={handleDeleteTodo}
+            toggleTodoCompletion={toggleTodoCompletion}
+            userId={payload?.id}
           />
         </div>
       </div>
