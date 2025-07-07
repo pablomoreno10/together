@@ -3,6 +3,7 @@ import io from 'socket.io-client';
 import axios from 'axios';
 import { getTokenPayload } from '../utils/Auth'; 
 import DashboardHeader from '../components/DashboardHeader.jsx';
+import Footer from '../components/Footer.jsx';
 
 
 const socket = io(import.meta.env.VITE_BACKEND_URL); 
@@ -40,7 +41,6 @@ function Chat() {
 
 
   useEffect(() => {
-    // Fetch existing messages on load
     const fetchMessages = async () => {
       try {
         const res = await axios.get(
@@ -105,6 +105,7 @@ function Chat() {
           </button>
         </div>
       </div>
+      <Footer />
     </div>
   );
 }

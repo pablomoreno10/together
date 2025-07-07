@@ -6,6 +6,7 @@ import CreateEventForm from '../components/CreateEventForm.jsx';
 import CreateTodoForm from '../components/CreateTodoForm.jsx';
 import TodoList from '../components/TodoList.jsx';
 import TodoAreaChart from '../components/TodoGraph.jsx';
+import Footer from '../components/Footer.jsx';
 import { getTokenPayload } from '../utils/Auth';
 
 function Dashboard() {
@@ -246,6 +247,7 @@ function Dashboard() {
         <h2 className="text-2xl font-semibold mb-4">To-Do Completion Timeline</h2>
         <TodoAreaChart token={token} />
       </div>
+      <Footer />
     </div>
   );
 }

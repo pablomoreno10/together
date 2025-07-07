@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import DashboardHeader from '../components/DashboardHeader.jsx';
+import Footer from '../components/Footer.jsx';
 
 
 function Roster() {
@@ -47,6 +48,7 @@ function Roster() {
           ))}
         </ul>
       </div>
+      <Footer />
     </div>
   );
 }
