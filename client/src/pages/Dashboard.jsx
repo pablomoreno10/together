@@ -5,6 +5,7 @@ import EventCard from '../components/EventCard.jsx';
 import CreateEventForm from '../components/CreateEventForm.jsx';
 import CreateTodoForm from '../components/CreateTodoForm.jsx';
 import TodoList from '../components/TodoList.jsx';
+import TodoAreaChart from '../components/TodoGraph.jsx';
 import { getTokenPayload } from '../utils/Auth';
 
 function Dashboard() {
@@ -240,6 +241,10 @@ function Dashboard() {
             userId={payload?.id}
           />
         </div>
+      </div>
+      <div className="mt-8">
+        <h2 className="text-2xl font-semibold mb-4">To-Do Completion Timeline</h2>
+        <TodoAreaChart token={token} />
       </div>
     </div>
   );
