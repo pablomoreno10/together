@@ -46,7 +46,7 @@ function Login() {
       </div>
 
       <div className="w-full md:w-1/2 flex justify-center items-center p-6">
-        <form onSubmit={handleSubmit} className="w-full max-w-sm bg-white p-6 rounded shadow">
+        <form onSubmit={handleSubmit} className="w-full max-w-sm p-6 rounded shadow border-4 border-double border-wine" >
           <h2 className="text-3xl font-bold text-espresso mb-6 text-center">Log In</h2>
 
           {error && <p className="text-sm text-red-500 mb-4 text-center">{error}</p>}

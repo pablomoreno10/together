@@ -14,7 +14,6 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    console.log("Submitting register form..."); 
 
     try {
       const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/register`, {
@@ -25,30 +24,30 @@ function Register() {
         role
       });
 
-      console.log("Register success ✅", res.data); // 🔍
+      console.log("Register success", res.data); 
 
       localStorage.setItem('token', res.data.token);
       navigate('/dashboard');
     } catch (err) {
-      console.error("Register failed ❌", err); // 🔍
+      console.error("Register failed", err); 
       setError(err.response?.data?.message || 'Registration failed');
     }
 };
 
   return (
-    <div className="flex items-center justify-center h-screen bg-gray-100">
+    <div className="flex items-center justify-center h-screen">
       <form
         onSubmit={handleSubmit}
-        className="bg-white p-6 rounded shadow-md w-80 space-y-4"
+        className="bg- p-6 rounded shadow-md w-80 space-y-4 border-4 border-double border-wine"
       >
-        <h2 className="text-xl font-bold text-center">Register</h2>
+        <h2 className="text-3xl font-bold text-espresso mb-6 text-center">Register</h2>
         {error && <p className="text-red-500 text-sm">{error}</p>}
         <input
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="Name"
-          className="w-full px-3 py-2 border rounded"
+          className="w-full px-4 py-2 border border-pewter rounded mb-4 text-espresso placeholder:text-pewter focus:outline-none focus:ring-2 focus:ring-wine"
           required
         />
         <input
@@ -56,7 +55,7 @@ function Register() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="Rutgers Email"
-          className="w-full px-3 py-2 border rounded"
+          className="w-full px-4 py-2 border border-pewter rounded mb-4 text-espresso placeholder:text-pewter focus:outline-none focus:ring-2 focus:ring-wine"
           required
         />
         <input
@@ -64,7 +63,7 @@ function Register() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Password"
-          className="w-full px-3 py-2 border rounded"
+          className="w-full px-4 py-2 border border-pewter rounded mb-4 text-espresso placeholder:text-pewter focus:outline-none focus:ring-2 focus:ring-wine"
           required
         />
         <input
@@ -72,7 +71,7 @@ function Register() {
           value={teamId}
           onChange={(e) => setTeamId(e.target.value)}
           placeholder="Team Name"
-          className="w-full px-3 py-2 border rounded"
+          className="w-full px-4 py-2 border border-pewter rounded mb-4 text-espresso placeholder:text-pewter focus:outline-none focus:ring-2 focus:ring-wine"
           required
         />
         <input
@@ -80,17 +79,17 @@ function Register() {
           value={role}
           onChange={(e) => setRole(e.target.value)}
           placeholder="Player Role (e.g., player, captain)"
-          className="w-full px-3 py-2 border rounded"
+          className="w-full px-4 py-2 border border-pewter rounded mb-4 text-espresso placeholder:text-pewter focus:outline-none focus:ring-2 focus:ring-wine"
           required
         />
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+          className="w-full bg-wine hover:bg-espresso text-white py-2 rounded transition duration-200"
         >
           Register
         </button>
         <p className="text-sm text-center">
-          Already have an account? <a href="/" className="text-blue-500">Log In</a>
+          Already have an account? <a href="/" className="text-wine font-semibold hover:underline">Log In</a>
         </p>
       </form>
     </div>
