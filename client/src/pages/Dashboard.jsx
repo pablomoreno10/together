@@ -6,7 +6,6 @@ import CreateEventForm from '../components/CreateEventForm.jsx';
 import CreateTodoForm from '../components/CreateTodoForm.jsx';
 import TodoList from '../components/TodoList.jsx';
 import TodoAreaChart from '../components/TodoGraph.jsx';
-import Footer from '../components/Footer.jsx';
 import { getTokenPayload } from '../utils/Auth';
 
 function Dashboard() {
@@ -43,9 +42,7 @@ function Dashboard() {
         setAttending(event.attending?.includes(payload?.id) || false);
       } catch (err) {
         console.error("Error loading event:", err.message);
-      } finally {
-        setLoading(false);
-      }
+      } 
     };
 
     const fetchTodos = async () => {
@@ -180,7 +177,7 @@ function Dashboard() {
         {/* Left: Event */}
         <div className="flex-1 space-y-4">
           {isCaptain && !showEventForm && (
-            <button onClick={() => setShowEventForm(true)} className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+            <button onClick={() => setShowEventForm(true)} className="px-4 py-2 bg-pewter text-white rounded hover:pewter-700">
               + Create Event
             </button>
           )}
@@ -215,7 +212,7 @@ function Dashboard() {
           {isCaptain && !showTodoForm && (
             <button
               onClick={() => setShowTodoForm(true)}
-              className="px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700"
+              className="px-4 py-2 bg-pewter text-white rounded hover:bg-pewter-700"
             >
               + Create To-Do
             </button>
@@ -244,10 +241,9 @@ function Dashboard() {
         </div>
       </div>
       <div className="mt-8">
-        <h2 className="text-2xl font-semibold mb-4">To-Do Completion Timeline</h2>
+        <h2 className="text-2xl font-semibold mb-4 text-pewter">Completion Trends</h2>
         <TodoAreaChart token={token} />
       </div>
-      <Footer />
     </div>
   );
 }

@@ -18,7 +18,7 @@ function TodoList({ todos, isCaptain, onDelete, toggleTodoCompletion, userId  })
                 {isCaptain && (
                   <button
                     onClick={() => onDelete(todo._id)}
-                    className="ml-2 text-red-500 hover:text-red-700 text-sm"
+                    className="ml-2 text-wine hover:text-espresso text-sm"
                   >
                     Delete
                   </button>
@@ -27,9 +27,9 @@ function TodoList({ todos, isCaptain, onDelete, toggleTodoCompletion, userId  })
               onClick={() => toggleTodoCompletion(todo._id)}
               className={`ml-2 text-sm ${
                 todo.completedBy?.some(user => user._id === userId)
-                  ? 'text-green-500'
+                  ? 'text-pewter'
                   : 'text-gray-500'
-                } hover:text-blue-700`}
+                } hover:text-wine`}
               >
                 {todo.completedBy?.some(user => user._id === userId)
                   ? 'Mark Incomplete'

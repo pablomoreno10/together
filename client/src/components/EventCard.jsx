@@ -17,7 +17,7 @@ function EventCard({ nextEvent, attending, attendingCount, attendeeList, toggleA
       <button
         onClick={toggleAttendance}
         className={`mt-4 px-4 py-2 rounded ${
-          attending ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600'
+          attending ? 'bg-wine hover:espresso' : 'bg-pewter hover:pewter-700'
         } text-white font-semibold`}
       >
         {attending ? "Not Going ❌" : "I'm Going ✅"}
@@ -26,7 +26,7 @@ function EventCard({ nextEvent, attending, attendingCount, attendeeList, toggleA
       {isCaptain && (
         <button
           onClick={() => onDelete(nextEvent._id)}
-          className="mt-2 ml-4 px-4 py-2 rounded bg-red-500 hover:bg-red-600 text-white font-semibold"
+          className="mt-2 ml-4 px-4 py-2 rounded bg-wine hover:bg-espresso text-white font-semibold"
         >
           Delete Event 🗑️
         </button>

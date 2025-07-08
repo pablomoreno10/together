@@ -3,7 +3,6 @@ import io from 'socket.io-client';
 import axios from 'axios';
 import { getTokenPayload } from '../utils/Auth'; 
 import DashboardHeader from '../components/DashboardHeader.jsx';
-import Footer from '../components/Footer.jsx';
 
 
 const socket = io(import.meta.env.VITE_BACKEND_URL); 
@@ -99,13 +98,12 @@ function Chat() {
           />
           <button
             onClick={sendMessage}
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+            className="bg-pewter text-white px-4 py-2 rounded hover:bg-pewter-700"
           >
             Send
           </button>
         </div>
       </div>
-      <Footer />
     </div>
   );
 }
