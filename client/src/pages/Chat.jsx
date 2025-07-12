@@ -77,7 +77,7 @@ function Chat() {
 
     <div className="min-h-screen bg-gray-100 p-6">
       <DashboardHeader/>
-      <div className="max-w-2xl mx-auto bg-white rounded shadow p-4 h-[70vh] flex flex-col">
+      <div className="max-w-2xl mx-auto bg-white rounded shadow p-4 h-[70vh] flex flex-col border-4 border-double border-wine">
         <div className="flex-1 overflow-y-auto space-y-2 mb-4">
           {messages.map((msg) => (
             <div key={msg._id} className="bg-gray-200 p-2 rounded">
