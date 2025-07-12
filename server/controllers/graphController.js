@@ -1,17 +1,18 @@
-const Todo = require('../models/todo');
+const CompletionLog = require('../models/completion');
 
 const getTodoCompletionTimeline = async (req, res) => {
   try {
     const { teamId } = req.user;
 
-    const result = await Todo.aggregate([
+    const result = await CompletionLog.aggregate([
       { $match: { teamId, completedBy: { $exists: true, $not: { $size: 0 } } } },
       { $unwind: "$completedBy" },
       {
         $group: {
           _id: {
             year: { $year: "$updatedAt" },
-            month: { $month: "$updatedAt" }
+            month: { $month: "$updatedAt" },
+            day: { $dayOfMonth: "$updatedAt" }
           },
           count: { $sum: 1 }
         }
@@ -26,6 +27,13 @@ const getTodoCompletionTimeline = async (req, res) => {
                   { $lt: ["$_id.month", 10] },
                   { $concat: ["0", { $toString: "$_id.month" }] },
                   { $toString: "$_id.month" }
+                ]
+              },"-",
+              {
+                $cond: [
+                  { $lt: ["$_id.day", 10] },
+                  { $concat: ["0", { $toString: "$_id.day" }] },
+                  { $toString: "$_id.day" }
                 ]
               }
             ]

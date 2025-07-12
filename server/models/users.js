@@ -29,7 +29,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
         default: 'mens-soccer',
-        enum: ['mens-soccer'] //Will add more later on
+        enum: ['mens-soccer'] 
     }
 });
 

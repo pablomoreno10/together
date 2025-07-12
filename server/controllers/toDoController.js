@@ -1,5 +1,7 @@
 const Todo = require('../models/todo');
 const mongoose = require('mongoose');
+const CompletionLog = require('../models/completion'); 
+
 
 const createToDo = async (req, res) => {
   try {
@@ -63,7 +65,7 @@ const deleteToDo = async (req, res) => {
 const toggleToDoCompletion = async (req, res) => {
   try {
     const { id } = req.params;
-    const { id: userId } = req.user;
+    const { id: userId, teamId } = req.user;
 
     const todo = await Todo.findById(id);
     if (!todo) {
@@ -76,6 +78,13 @@ const toggleToDoCompletion = async (req, res) => {
       todo.completedBy = todo.completedBy.filter(uid => uid.toString() !== userId);
     } else {
       todo.completedBy.push(userId);
+
+      await CompletionLog.create({
+      todoId: todo._id,
+      completedBy: userId,
+      teamId: teamId,
+      completedAt: new Date()
+    });
     }
 
     await todo.save();
