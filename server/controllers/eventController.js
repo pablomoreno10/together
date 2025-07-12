@@ -1,5 +1,6 @@
 const Event = require('../models/events');
 const User = require('../models/users');
+const nodemailer = require('nodemailer');
 
 const { createGoogleCalendarEvent } = require('../utils/calendarService');
 
@@ -7,7 +8,7 @@ const createEvent = async (req, res) => {
 
     try{
         const {title, location, date, notes} = req.body;
-        const { id: createdBy, role, teamId } = req.user; //Add teamId to the destructured user object
+        const { id: createdBy, role, teamId} = req.user; //Add teamId to the destructured user object
         
         if (role !== 'captain'){
             return res(401).json({message: 'Sorry, only captains are authorized to create events.'})
@@ -18,23 +19,49 @@ const createEvent = async (req, res) => {
             date,
             notes,
             createdBy,
-            teamId, //include teamId when creating the event
+            teamId,
         });
-        
+
         try{
-          //console.log("Attempting to create Google Calendar event...");
-          //This will not only create and store the event inside MongoDB but also create it inside Google Calendar simultaneously.
+          //This will not only create and store the event inside MongoDB but also create it inside Google Calendar through GCP simultaneously.
           await createGoogleCalendarEvent({
             title,
             location,
             date,
             notes
           });
-          //console.log("Google Calendar event successfully created");
+
         }catch(err){
           console.log('Error creating event in Google Calendar', err.message);
         }
+
+        let transporter = nodemailer.createTransport({
+          service: 'gmail',
+          auth:{
+            user: process.env.EMAIL_USER,
+            pass: process.env.APP_PASSWD,
+            },
+        });
         
+        const users = await User.find({ teamId }); //find only returns a promise, so we need to await it
+        const emails = users.map(user => user.email); //extract emails from the users array, to send emails to all users in the team :)
+
+        let mailOptions = {
+          from: process.env.EMAIL_USER,
+          to: emails,
+          subject: `TOGETHER FC - New Event Created: ${title}`,
+          text: `A new event has been created:\n\nTitle: ${title}\nLocation: ${location}\nDate: ${date}\nNotes: ${notes}\n\nPlease check the app or calendar for more details.`
+        };
+
+        
+        
+        try {
+          const info = await transporter.sendMail(mailOptions);
+          console.log('Email sent:', info.response);
+        } catch (err) {
+          console.log('Error sending email:', err.message);
+        }
+
         res.status(201).json({ event });
 
     }catch(err){
