@@ -1,3 +1,4 @@
+import UserBox from './UserBox';
 function Footer() {
   return (
     <footer className="text-wine py-6 mt-16">
@@ -14,6 +15,7 @@ function Footer() {
             <a href="https://rutgersnewarkathletics.com/" target="_blank" rel="noreferrer" className="hover:underline">Rutgers–Newark Athletics</a>
             <a href="mailto:pablonicolasmc5@gmail.com" className="hover:underline">Contact Developer</a>
             </div>
+            <UserBox />
         </div>
     </footer>
 
