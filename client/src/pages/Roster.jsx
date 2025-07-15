@@ -10,7 +10,7 @@ function Roster() {
   useEffect(() => {
     const fetchTeam = async () => {
       try {
-        const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/users/team`, {
+        const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/users/team`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setUsers(res.data);

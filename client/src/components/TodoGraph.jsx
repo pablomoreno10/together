@@ -8,7 +8,7 @@ function TodoAreaChart({ token }) {
   useEffect(() => {
     const fetchChartData = async () => {
       try {
-        const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/graph/stats/completionTimeline`, {
+        const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/graph/stats/completionTimeline`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setData(res.data);

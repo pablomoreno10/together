@@ -35,7 +35,7 @@ function Dashboard() {
   useEffect(() => {
     const fetchNextEvent = async () => {
       try {
-        const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/events/next`, { headers });
+        const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/events/next`, { headers });
         const event = res.data;
         setNextEvent(event);
         setAttendingCount(event.attending?.length || 0);
@@ -47,7 +47,7 @@ function Dashboard() {
 
     const fetchTodos = async () => {
       try {
-        const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/todos`, { headers });
+        const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/todos`, { headers });
         setTodos(res.data);
       } catch (err) {
         console.error("Error loading todos:", err.message);
@@ -62,7 +62,7 @@ function Dashboard() {
     const fetchAttendeeNames = async () => {
       if (!nextEvent?._id) return;
       try {
-        const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/events/${nextEvent._id}/tracker`, { headers });
+        const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/events/${nextEvent._id}/tracker`, { headers });
         setAttendeeList(res.data.attending);
       } catch (err) {
         console.error('Error fetching attendee list:', err.message);
@@ -75,7 +75,7 @@ function Dashboard() {
   const toggleAttendance = async () => {
     try {
       const res = await axios.patch(
-        `${import.meta.env.VITE_BACKEND_URL}/api/events/${nextEvent._id}/attend`,
+        `${import.meta.env.VITE_BACKEND_URL}/events/${nextEvent._id}/attend`,
         {},
         { headers }
       );
@@ -96,7 +96,7 @@ function Dashboard() {
   const toggleTodoCompletion = async (todoId) => {
   try {
     const res = await axios.patch(
-      `${import.meta.env.VITE_BACKEND_URL}/api/todos/${todoId}/complete`,
+      `${import.meta.env.VITE_BACKEND_URL}/todos/${todoId}/complete`,
       {},
       { headers }
     );
@@ -118,7 +118,7 @@ function Dashboard() {
     e.preventDefault();
     try {
       await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/api/events`,
+        `${import.meta.env.VITE_BACKEND_URL}/events`,
         { title, location, date, notes },
         { headers }
       );
@@ -133,7 +133,7 @@ function Dashboard() {
     e.preventDefault();
     try {
       await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/api/todos`,
+        `${import.meta.env.VITE_BACKEND_URL}/todos`,
         {
           title: title.trim(),
           description: description.trim(),
@@ -153,7 +153,7 @@ function Dashboard() {
 
   const handleDeleteEvent = async (id) => {
     try {
-      await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/api/events/${id}`, { headers });
+      await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/events/${id}`, { headers });
       window.location.reload();
     } catch (err) {
       console.error("Error deleting event:", err.message);
@@ -162,7 +162,7 @@ function Dashboard() {
 
   const handleDeleteTodo = async (id) => {
     try {
-      await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/api/todos/${id}`, { headers });
+      await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/todos/${id}`, { headers });
       setTodos((prev) => prev.filter((todo) => todo._id !== id));
     } catch (err) {
       console.error('Error deleting todo:', err.message);

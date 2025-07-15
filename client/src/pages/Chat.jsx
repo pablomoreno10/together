@@ -43,7 +43,7 @@ function Chat() {
     const fetchMessages = async () => {
       try {
         const res = await axios.get(
-          `${import.meta.env.VITE_BACKEND_URL}/api/chat/${teamId}`,
+          `${import.meta.env.VITE_BACKEND_URL}/chat/${teamId}`,
           { headers }
         );
         console.log('messages: ', res.data);

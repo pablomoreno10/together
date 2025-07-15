@@ -16,7 +16,7 @@ function Register() {
     setError('');
 
     try {
-      const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/register`, {
+      const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/auth/register`, {
         name,
         email,
         password,

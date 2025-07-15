@@ -57,7 +57,7 @@ const createEvent = async (req, res) => {
         
         try {
           const info = await transporter.sendMail(mailOptions);
-          console.log('Email sent:', info.response);
+          //console.log('Email sent:', info.response);
         } catch (err) {
           console.log('Error sending email:', err.message);
         }
