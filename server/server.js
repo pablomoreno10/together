@@ -3,7 +3,7 @@ const { Server } = require('socket.io');
 const dotenv = require('dotenv');
 dotenv.config();
 
-const clientOrigin = process.env.CLIENT_ORIGIN?.replace(/\/$/, ''); 
+const clientOrigin = 'https://together-beta.vercel.app';
 
 const express = require('express');
 const cors = require('cors');
