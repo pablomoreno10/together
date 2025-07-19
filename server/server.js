@@ -4,21 +4,25 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 const clientOrigin = process.env.CLIENT_ORIGIN?.replace(/\/$/, ''); 
+
 const express = require('express');
 const cors = require('cors');
 const app = express();
 
 app.use(cors({
   origin: clientOrigin,
-  credentials: true
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
 }));
-
+app.use(express.json()); 
+app.use(express.urlencoded({ extended: true })); 
 const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
     origin: clientOrigin,
-    credentials: true
+    credentials: true,
+    methods: ['GET', 'POST'],
   }
 });
 
@@ -26,7 +30,6 @@ const { handlerSocket } = require('./sockets/sockerController');
 handlerSocket(io);
 
 const connectDB = require('./config/db');
-app.use(express.json());
 connectDB();
 
 const rateLimit = require('express-rate-limit');
@@ -37,7 +40,6 @@ const globalLimiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
 });
-
 app.use(globalLimiter);
 
 app.use('/api/auth', require('./routes/auth'));

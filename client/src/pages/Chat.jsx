@@ -5,7 +5,10 @@ import { getTokenPayload } from '../utils/Auth';
 import DashboardHeader from '../components/DashboardHeader.jsx';
 
 
-const socket = io(import.meta.env.VITE_BACKEND_URL); 
+const socket = io(import.meta.env.VITE_BACKEND_URL, {
+  withCredentials: true,
+  transports: ['websocket', 'polling'],
+});
 
 function Chat() {
   const [messages, setMessages] = useState([]);
