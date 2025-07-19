@@ -1,29 +1,37 @@
 const http = require('http');
-const {Server} = require('socket.io');
+const { Server } = require('socket.io');
 const dotenv = require('dotenv');
 dotenv.config();
+
+const clientOrigin = process.env.CLIENT_ORIGIN?.replace(/\/$/, ''); 
 const express = require('express');
 const cors = require('cors');
 const app = express();
+
 app.use(cors({
-  origin: process.env.CLIENT_ORIGIN,
+  origin: clientOrigin,
   credentials: true
 }));
-const server = http.createServer(app); 
+
+const server = http.createServer(app);
+
 const io = new Server(server, {
   cors: {
-    origin: process.env.CLIENT_ORIGIN, 
+    origin: clientOrigin,
     credentials: true
   }
 });
-const {handlerSocket} = require('./sockets/sockerController');
+
+const { handlerSocket } = require('./sockets/sockerController');
 handlerSocket(io);
+
 const connectDB = require('./config/db');
-app.use(express.json()); 
+app.use(express.json());
 connectDB();
+
 const rateLimit = require('express-rate-limit');
 const globalLimiter = rateLimit({
-  windowMs: 1 * 60 * 1000, 
+  windowMs: 1 * 60 * 1000,
   max: 100,
   message: 'Too many requests. please try again later',
   standardHeaders: true,
@@ -38,7 +46,6 @@ app.use('/api/events', require('./routes/events'));
 app.use('/api/users', require('./routes/users'));
 app.use('/api/chat', require('./routes/chat'));
 app.use('/api/graph', require('./routes/graph'));
-
 
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
