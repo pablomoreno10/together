@@ -70,7 +70,7 @@ function Register() {
           type="text"
           value={teamId}
           onChange={(e) => setTeamId(e.target.value)}
-          placeholder="Team Name"
+          placeholder="Team Name (mens-soccer)"
           className="w-full px-4 py-2 border border-pewter rounded mb-4 text-espresso placeholder:text-pewter focus:outline-none focus:ring-2 focus:ring-wine"
           required
         />
@@ -78,7 +78,7 @@ function Register() {
           type="text"
           value={role}
           onChange={(e) => setRole(e.target.value)}
-          placeholder="Player Role (e.g., player, captain)"
+          placeholder="Player Role (player, captain)"
           className="w-full px-4 py-2 border border-pewter rounded mb-4 text-espresso placeholder:text-pewter focus:outline-none focus:ring-2 focus:ring-wine"
           required
         />

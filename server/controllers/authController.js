@@ -1,6 +1,6 @@
 const User = require('../models/users.js'); //mongoose model
 const jwt = require('jsonwebtoken');
-const allowedEmails = require('../utils/allowedEmails.js'); 
+const allowedEmails = process.env.ALLOWED_EMAILS?.split(',').map(email => email.trim().toLowerCase()) || [];
 
 //generate client token
 
