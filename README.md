@@ -57,8 +57,10 @@ Built to address real needs during our NCAA season, this app centralizes everyth
 ### 1) Clone the repository
 
 git clone https://github.com/pablomoreno10/together.git
+
 cd together
-2) Install dependencies
+
+### 2) Install dependencies
 # Frontend
 cd client
 npm install
