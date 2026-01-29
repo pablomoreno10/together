@@ -4,22 +4,22 @@
 
 Built to address real needs during our NCAA season, this app centralizes everything from calendars and to-dos to messages and reminders; helping teammates stay in sync without relying on scattered group chats or clunky spreadsheets.
 
-> 🧠 Made for athletes  
-> 🌐 Frontend deployed on **Vercel** · Backend hosted on **AWS EC2**
+> Made for athletes  
+> Frontend deployed on **Vercel** · Backend hosted on **AWS EC2** (Discontinued for the moment, more to come soon)
 
 ---
 
-## 🚀 Features
+## Features
 
-- 🔐 **Role-Based Auth** — JWT login system with `player`, `captain`, and `admin` access levels  
-- 📅 **Google Calendar Sync** — Full calendar integration via GCP OAuth2 (two-way sync)  
-- 📬 **Email Notifications** — Auto-emails triggered on event creation and updates (NodeMailer)  
-- 💬 **Real-Time Chat** — Socket.io messaging system with sender IDs and timestamps  
-- ✅ **To-Do Tracking** — Task assignments, completions, and team leaderboard  
-- 📊 **Engagement Dashboard** — Visuals on event/task activity and team involvement  
+- **Role-Based Auth** — JWT login system with `player`, `captain`, and `admin` access levels  
+- **Google Calendar Sync** — Full calendar integration via GCP OAuth2 (two-way sync)  
+- **Email Notifications** — Auto-emails triggered on event creation and updates (NodeMailer)  
+- **Real-Time Chat** — Socket.io messaging system with sender IDs and timestamps  
+- **To-Do Tracking** — Task assignments, completions, and team leaderboard  
+- **Engagement Dashboard** — Visuals on event/task activity and team involvement  
 ---
 
-## 🧱 Architecture
+## Architecture
 
     Frontend (React + Vercel)
             ↓
@@ -35,7 +35,7 @@ Built to address real needs during our NCAA season, this app centralizes everyth
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 | Layer             | Technology               | Why It Was Used                                                                 |
 |------------------|---------------------------|----------------------------------------------------------------------------------|
@@ -52,7 +52,7 @@ Built to address real needs during our NCAA season, this app centralizes everyth
 
 ---
 
-## 📦 Setup Instructions
+## Setup Instructions
 
 ### 1) Clone the repository
 
@@ -93,13 +93,6 @@ as well as an '.env' inside '/client/' with:
 
 ---
 
-## 🌐 Live Demo
-
-🔗 https://together-beta.vercel.app  
-_(Demo credentials available upon request)_
-
----
-
 ## 📬 Why I Built This
 
 As a student-athlete, I often saw how easily things got lost in communication such as players missing practices, to-dos forgotten, schedules misaligned.
@@ -107,30 +100,30 @@ As a student-athlete, I often saw how easily things got lost in communication su
 **FC Together** was my response to that chaos.  
 A centralized, secure platform tailored for sports teams, with real teammates actively shaping its design.
 
-This project helped me grow as a full-stack developer while solving a real-world problem, and I’m proud to continue improving it.
+This project helped me grow as a full-stack developer while solving a real-world problem, and I’m proud to continue improving it (more this spring 2026).
 
 ---
 
-## 🧠 What I Learned
+## What I Learned
 
-- 🔧 **Infrastructure** — Set up Node.js app on AWS EC2, configured NGINX and system processes  
-- 🔒 **Security** — Implemented JWT authentication, protected routes, rate limiting, CORS, and role-based access  
-- 📡 **API Integration** — Worked with GCP Calendar APIs  
-- 🧠 **Product Design** — Designed features based on live input from athletes and coaches  
-- 📈 **Fullstack Engineering** — Learned how to architect, build, and deploy a scalable full-stack app
+- **Infrastructure** — Set up Node.js app on AWS EC2, configured NGINX and system processes  
+- **Security** — Implemented JWT authentication, protected routes, rate limiting, CORS, and role-based access  
+- **API Integration** — Worked with GCP Calendar APIs  
+- **Product Design** — Designed features based on live input from athletes and coaches  
+- **Fullstack Engineering** — Learned how to architect, build, and deploy a scalable full-stack app
 
 ---
 
-## 🤝 Acknowledgments
+## Acknowledgments
 
 Thanks to my teammates at **Rutgers Newark Men’s Soccer**.
 
 ---
 
-## 👤 Author
+## Author
 
 **Pablo Moreno**  
 Computer Science @ Rutgers University–Newark  
-📫 pm896@rutgers.edu  
-🌐 LinkedIn: https://linkedin.com/in/pablomoreno10 
-🐙 GitHub: https://github.com/pablomoreno10
+pm896@rutgers.edu  
+LinkedIn: https://linkedin.com/in/pablomoreno10 
+GitHub: https://github.com/pablomoreno10
